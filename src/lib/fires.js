@@ -11,15 +11,33 @@ export const fireGroups = [
 
 export const fires = [
 	{
+		id: 'navaluenga-season',
+		name: 'Navaluenga — 46.139 ha (Ávila, 2026)',
+		file: 'data/NAVALUENGA.geojson',
+		group: 'season'
+	},
+	{
 		id: 'lamierla-season',
-		name: 'La Mierla — 35.268 ha (Guadalajara, 2026)',
+		name: 'La Mierla — 33.022 ha (Guadalajara, 2026)',
 		file: 'data/LAMIERLA.geojson',
 		group: 'season'
 	},
 	{
+		id: 'sanmartindevaldeiglesias-season',
+		name: 'San Martín de Valdeiglesias — 16.648 ha (Madrid, 2026)',
+		file: 'data/SANMARTINDEVALDEIGLESIAS.geojson',
+		group: 'season'
+	},
+	{
 		id: 'luesia-season',
-		name: 'Luesia — 15.158 ha (Zaragoza, 2026)',
+		name: 'Luesia — 15.045 ha (Zaragoza, 2026)',
 		file: 'data/LUESIA.geojson',
+		group: 'season'
+	},
+	{
+		id: 'nules-season',
+		name: 'Nules — 10.046 ha (Castellón/Castelló, 2026)',
+		file: 'data/NULES.geojson',
 		group: 'season'
 	},
 	{
@@ -41,34 +59,22 @@ export const fires = [
 		group: 'season'
 	},
 	{
+		id: 'villadelprado-season',
+		name: 'Villa del Prado — 3.673 ha (Madrid, 2026)',
+		file: 'data/VILLADELPRADO.geojson',
+		group: 'season'
+	},
+	{
 		id: 'pelayosdelarroyo-season',
-		name: 'Pelayos del Arroyo — 3.502 ha (Segovia, 2026)',
+		name: 'Pelayos del Arroyo — 3.495 ha (Segovia, 2026)',
 		file: 'data/PELAYOSDELARROYO.geojson',
 		group: 'season'
 	},
 	{
-		id: 'lecinena-season',
-		name: 'Leciñena — 2.830 ha (Zaragoza, 2026)',
-		file: 'data/LECINENA.geojson',
-		group: 'season'
-	},
-	{
-		id: 'soba-season',
-		name: 'Soba — 2.596 ha (Cantabria, 2026)',
-		file: 'data/SOBA.geojson',
-		group: 'season'
-	},
-	{
-		id: 'cruillesmonellsisantsadurnidelheura-season',
-		name: 'Cruïlles, Monells i Sant Sadurní de l\'Heura — 2.030 ha (Girona, 2026)',
-		file: 'data/CRUILLESMONELLSISANTSADURNIDELHEURA.geojson',
-		group: 'season'
-	},
-	{
-		id: 'navaluenga-season',
-		name: 'Navaluenga — 1.553 ha (Ávila, 2026)',
+		id: 'navaluenga-historic',
+		name: 'Navaluenga — 46.139 ha (Ávila, 2026)',
 		file: 'data/NAVALUENGA.geojson',
-		group: 'season'
+		group: 'historic'
 	},
 	{
 		id: 'unadequintana-historic',
@@ -84,7 +90,7 @@ export const fires = [
 	},
 	{
 		id: 'lamierla-historic',
-		name: 'La Mierla — 35.268 ha (Guadalajara, 2026)',
+		name: 'La Mierla — 33.022 ha (Guadalajara, 2026)',
 		file: 'data/LAMIERLA.geojson',
 		group: 'historic'
 	},
@@ -152,12 +158,6 @@ export const fires = [
 		id: 'almonasterlareal-historic',
 		name: 'Almonaster la Real — 16.758 ha (Huelva, 2020)',
 		file: 'data/ALMONASTERLAREAL.geojson',
-		group: 'historic'
-	},
-	{
-		id: 'luesia-historic',
-		name: 'Luesia — 15.158 ha (Zaragoza, 2026)',
-		file: 'data/LUESIA.geojson',
 		group: 'historic'
 	}
 ];

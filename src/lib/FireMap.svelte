@@ -2,13 +2,15 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Map as MapLibreMap, NavigationControl, setWorkerUrl } from 'maplibre-gl';
 	import 'maplibre-gl/dist/maplibre-gl.css';
-	// Import como asset: Vite copia el fichero y resuelve la URL (con el
-	// `base` correcto en el build) en vez de que MapLibre intente cargar su
-	// worker interno por una ruta que el bundler de producción no genera.
-	import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
 	import { boundsOf } from './geo.js';
 
-	setWorkerUrl(maplibreWorkerUrl);
+	// maplibre-gl-worker.mjs importa por ruta relativa fija a
+	// "./maplibre-gl-shared.mjs", así que no puede pasar por el pipeline de
+	// hashing de Vite (`?url` solo copiaría el primero y rompería esa
+	// import). Ambos ficheros se copian tal cual a public/ en cada
+	// `npm install` (ver scripts/copy-maplibre-worker.mjs) y se sirven aquí
+	// como estáticos, con el `base` de Vite aplicado a mano.
+	setWorkerUrl(`${import.meta.env.BASE_URL}maplibre-gl-worker.mjs`);
 
 	const FIRE_COLOR = '#FF2A01';
 
@@ -50,10 +52,7 @@
 
 		map.on('load', () => {
 			mapReady = true;
-			console.log('DEBUG map load fired');
 		});
-		map.on('error', (e) => console.log('DEBUG map error', e.error?.message ?? e));
-		window.__map = map;
 
 		map.on('click', (e) => {
 			if (!pickMode) return;
@@ -69,7 +68,6 @@
 	});
 
 	function syncFireLayer() {
-		console.log('DEBUG syncFireLayer', { hasMap: !!map, mapReady, hasGeojson: !!geojson });
 		if (!map || !mapReady || !geojson) return;
 
 		const source = map.getSource(SOURCE_ID);

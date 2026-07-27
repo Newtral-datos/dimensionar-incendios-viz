@@ -3,7 +3,7 @@
 	import ControlPanel from './lib/ControlPanel.svelte';
 	import { fires, fireGroups } from './lib/fires.js';
 	import { cities } from './lib/cities.js';
-	import { recenterGeoJSON, areaHectares, realCenter } from './lib/geo.js';
+	import { recenterGeoJSON, realCenter } from './lib/geo.js';
 
 	// Rutas a /public/*: hay que anteponer el base path (vacío en dev, el
 	// subpath del repo en el build de GitHub Pages, ver vite.config.js).
@@ -80,8 +80,10 @@
 			: [-3.7, 40.4]
 	);
 
-	const areaHa = $derived(displayGeojson ? areaHectares(displayGeojson) : null);
 	const fireProps = $derived(rawGeojson?.features?.[0]?.properties ?? null);
+	// Superficie original de EFFIS/Copernicus, no la recalculada por turf sobre
+	// el polígono trasladado: coinciden con la cifra del nombre del incendio.
+	const areaHa = $derived(fireProps?.AREA_HA ?? null);
 
 	const noteMode = $derived(
 		pickModeActive

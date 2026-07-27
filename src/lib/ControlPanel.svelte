@@ -13,6 +13,9 @@
 		noteMode = 'city'
 	} = $props();
 
+	// Solo tiene efecto en móvil: en escritorio el tirador no es clicable.
+	let collapsed = $state(false);
+
 	function formatArea(ha) {
 		if (ha == null) return '—';
 		return ha.toLocaleString('es-ES', { maximumFractionDigits: 0 });
@@ -23,11 +26,29 @@
 		const [y, m, d] = iso.slice(0, 10).split('-');
 		return `${d}/${m}/${y}`;
 	}
+
+	const selectedFireName = $derived(
+		fires.find((f) => f.id === selectedFireId)?.name?.split(' — ')[0] ?? ''
+	);
 </script>
 
-<div class="panel">
-	<div class="handle" aria-hidden="true"></div>
+<div class="panel" class:collapsed>
+	<button
+		type="button"
+		class="handle-row"
+		aria-expanded={!collapsed}
+		onclick={() => (collapsed = !collapsed)}
+	>
+		<span class="handle" aria-hidden="true"></span>
+		<span class="handle-summary">
+			{selectedFireName} — {formatArea(areaHa)} ha
+		</span>
+		<svg class="handle-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+			<path d="m6 9 6 6 6-6"/>
+		</svg>
+	</button>
 
+	<div class="panel-body">
 	<div class="controls">
 		<div class="group-toggle" role="tablist" aria-label="Periodo de incendios">
 			{#each fireGroups as g (g.id)}
@@ -129,6 +150,7 @@
 			sobre la ciudad elegida.
 		{/if}
 	</p>
+	</div>
 </div>
 
 <style>
@@ -147,10 +169,17 @@
 		box-shadow: var(--shadow);
 		display: flex;
 		flex-direction: column;
+		gap: 12px;
+	}
+
+	.panel-body {
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
 		gap: 16px;
 	}
 
-	.handle {
+	.handle-row {
 		display: none;
 	}
 
@@ -301,7 +330,7 @@
 	/* ── Cifra principal ── */
 	.hero {
 		position: relative;
-		overflow: hidden;
+		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -381,21 +410,145 @@
 			left: 0;
 			right: 0;
 			width: auto;
-			max-height: 62vh;
+			/* Cabe el contenido entero sin scroll (~326px); el % es solo
+			   una salvaguarda para pantallas anormalmente bajas. */
+			max-height: min(70vh, 340px);
+			gap: 6px;
 			border-radius: 16px 16px 0 0;
-			padding: 8px 16px calc(16px + env(safe-area-inset-bottom));
+			padding: 4px 12px calc(10px + env(safe-area-inset-bottom));
 			box-shadow: 0 -8px 24px rgba(22, 20, 14, 0.16);
 		}
 
+		.panel-body {
+			gap: 8px;
+			overflow: hidden;
+			transition: max-height 0.25s ease, opacity 0.2s ease;
+			max-height: 600px;
+			opacity: 1;
+		}
+
+		.panel.collapsed {
+			max-height: none;
+		}
+
+		.panel.collapsed .panel-body {
+			max-height: 0;
+			opacity: 0;
+		}
+
+		.handle-row {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			width: 100%;
+			padding: 6px 2px;
+			background: none;
+			border: none;
+			cursor: pointer;
+			-webkit-tap-highlight-color: transparent;
+		}
+
 		.handle {
-			display: block;
-			width: 36px;
+			flex-shrink: 0;
+			width: 32px;
 			height: 4px;
 			border-radius: 2px;
 			background: var(--card-2);
 			border: 1px solid var(--border);
-			margin: 2px auto 4px;
+		}
+
+		.handle-summary {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			text-align: left;
+			font-family: var(--font-mono);
+			font-size: 12.5px;
+			font-weight: 600;
+			color: var(--ink);
+			opacity: 0;
+			transition: opacity 0.15s ease;
+		}
+
+		.handle-chevron {
 			flex-shrink: 0;
+			width: 16px;
+			height: 16px;
+			color: var(--ink-muted);
+			transform: rotate(180deg);
+			transition: transform 0.25s ease;
+		}
+
+		.panel.collapsed .handle-summary {
+			opacity: 1;
+		}
+
+		.panel.collapsed .handle-chevron {
+			transform: rotate(0deg);
+		}
+
+		/* Contenido más compacto para que la hoja ocupe menos en móvil */
+		.controls {
+			padding: 8px;
+			gap: 6px;
+		}
+
+		.group-toggle button {
+			padding: 5px 6px;
+			font-size: 11px;
+		}
+
+		label {
+			font-size: 10px;
+		}
+
+		.field {
+			gap: 3px;
+		}
+
+		select {
+			padding: 7px 30px 7px 32px;
+			font-size: 12.5px;
+		}
+
+		.pick-btn {
+			padding: 6px 10px;
+			font-size: 11.5px;
+		}
+
+		.hero {
+			padding: 6px 14px;
+		}
+
+		.hero-value {
+			font-size: 22px;
+		}
+
+		.hero-unit {
+			font-size: 12px;
+		}
+
+		.hero-label {
+			font-size: 9.5px;
+		}
+
+		.stats {
+			gap: 2px 12px;
+		}
+
+		.stat-val {
+			font-size: 12.5px;
+		}
+
+		.stat-key {
+			font-size: 9px;
+		}
+
+		/* Texto explicativo: prescindible en móvil, ocupa espacio de sobra */
+		.note {
+			display: none;
 		}
 	}
 </style>
